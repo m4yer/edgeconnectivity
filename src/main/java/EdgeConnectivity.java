@@ -17,11 +17,12 @@ public class EdgeConnectivity implements GraphProperty {
             return false;
         }
 
-        for (Edge edge : graph.getEdges()) {
+        for (var edge : graph.getEdges()) {
             planarityTester.removeEdge(edge.getFromV(), edge.getToV());
 
             // check if graph is planar by deleting edge
             if (planarityTester.isPlanar()) {
+                System.out.println("Graph became planar after removing " + edge.getFromV() + " and " + edge.getToV());
                 return true;
             }
 

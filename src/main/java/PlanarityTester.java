@@ -22,8 +22,8 @@ public class PlanarityTester {
     private Map<Pair<UUID, UUID>, ConflictPair> stackBottom;
     private List<ConflictPair> stack;
 
-    private Map<UUID, Set<UUID>> adjacencyList;
-    private List<UUID> vertices;
+    private final Map<UUID, Set<UUID>> adjacencyList;
+    private final List<UUID> vertices;
     private Integer numEdges;
 
     PlanarityTester(List<UUID> vertices) {
@@ -31,7 +31,7 @@ public class PlanarityTester {
         this.adjacencyList = new HashMap<>();
         this.vertices = vertices;
 
-        for (UUID vertex : this.vertices) {
+        for (var vertex : this.vertices) {
             adjacencyList.put(vertex, new HashSet<>());
         }
     }
@@ -64,7 +64,7 @@ public class PlanarityTester {
         this.height.put(vertex, h);
         this.parent.put(vertex, p);
 
-        for (UUID to : this.adjacencyList.get(vertex)) {
+        for (var to : this.adjacencyList.get(vertex)) {
             // straight edge
             if (this.dirAdjacencyList.containsKey(to) && this.dirAdjacencyList.get(to).contains(vertex)) {
                 continue;
@@ -72,7 +72,7 @@ public class PlanarityTester {
                 this.dirAdjacencyList.get(vertex).add(to);
             }
 
-            Pair<UUID, UUID> v_to = new Pair<>(vertex, to);
+            var v_to = new Pair<>(vertex, to);
             this.lowpt.put(v_to, this.height.get(vertex));
             this.lowpt2.put(v_to, this.height.get(vertex));
 
@@ -89,7 +89,7 @@ public class PlanarityTester {
             }
 
             if (p != null) {
-                Pair<UUID, UUID> p_v = new Pair<>(p, vertex);
+                var p_v = new Pair<>(p, vertex);
 
                 if (this.lowpt.get(v_to) < this.lowpt.get(p_v)) {
                     this.lowpt2.put(p_v, min(this.lowpt.get(p_v), this.lowpt2.get(p_v)));
@@ -104,10 +104,10 @@ public class PlanarityTester {
     }
 
     private boolean addConstraints(Pair<UUID, UUID> v_to, Pair<UUID, UUID> p_v) {
-        ConflictPair P = new ConflictPair(new Interval(), new Interval());
+        var P = new ConflictPair(new Interval(), new Interval());
 
         while (true) {
-            ConflictPair Q = this.stack.remove(this.stack.size() - 1);
+            var Q = this.stack.remove(this.stack.size() - 1);
 
             if (!Q.getLeft().isEmpty()) {
                 Q.swapIntervals();
@@ -134,7 +134,7 @@ public class PlanarityTester {
 
         while (conflicting(this.stack.get(this.stack.size() - 1).getLeft(), v_to) ||
                 conflicting(this.stack.get(this.stack.size() - 1).getRight(), v_to)) {
-            ConflictPair Q = this.stack.remove(this.stack.size() - 1);
+            var Q = this.stack.remove(this.stack.size() - 1);
 
             if (conflicting(Q.getRight(), v_to)) {
                 Q.swapIntervals();
@@ -174,18 +174,17 @@ public class PlanarityTester {
             return this.lowpt.get(conflictPair.getLeft().getLow());
         }
 
-        return min(this.lowpt.get(conflictPair.getLeft().getLow()),
-                this.lowpt.get(conflictPair.getRight().getLow()));
+        return min(this.lowpt.get(conflictPair.getLeft().getLow()), this.lowpt.get(conflictPair.getRight().getLow()));
     }
 
     private boolean checkPlanarity(UUID vertex) {
-        Pair<UUID, UUID> p_v = new Pair<>(this.parent.get(vertex), vertex);
+        var p_v = new Pair<>(this.parent.get(vertex), vertex);
 
-        List<UUID> sortedAdjList = new ArrayList<>(this.dirAdjacencyList.get(vertex));
+        var sortedAdjList = new ArrayList<>(this.dirAdjacencyList.get(vertex));
         sortedAdjList.sort(Comparator.comparingInt(neighbour -> nestingDepth.get(new Pair<>(vertex, neighbour))));
 
         for (UUID to : sortedAdjList) {
-            Pair<UUID, UUID> v_to = new Pair<>(vertex, to);
+            var v_to = new Pair<>(vertex, to);
 
             this.stackBottom.put(v_to, stack.isEmpty() ? null : stack.get(stack.size() - 1));
 
@@ -208,10 +207,10 @@ public class PlanarityTester {
         }
 
         if (this.parent.get(vertex) != null) {
-            UUID p = this.parent.get(vertex);
+            var p = this.parent.get(vertex);
 
             while (!this.stack.isEmpty() && Objects.equals(lowest(this.stack.get(this.stack.size() - 1)), this.height.get(p))) {
-                ConflictPair P = this.stack.remove(this.stack.size() - 1);
+                this.stack.remove(this.stack.size() - 1);
             }
 
             if (!this.stack.isEmpty()) {
@@ -255,6 +254,7 @@ public class PlanarityTester {
         if (getNumVertices() < 5) {
             return true;
         }
+
         if (3 * getNumVertices() - 6 < getNumEdges()) {
             return false;
         }
@@ -263,7 +263,7 @@ public class PlanarityTester {
         this.parent = new HashMap<>();
 
         this.dirAdjacencyList = new HashMap<>();
-        for (UUID vertex : this.vertices) {
+        for (var vertex : this.vertices) {
             this.height.put(vertex, -1);
             this.parent.put(vertex, null);
             this.dirAdjacencyList.put(vertex, new HashSet<>());
@@ -273,7 +273,7 @@ public class PlanarityTester {
         this.lowpt2 = new HashMap<>();
         this.nestingDepth = new HashMap<>();
 
-        for (UUID vertex : this.vertices) {
+        for (var vertex : this.vertices) {
             if (this.height.get(vertex) == -1) {
                 orientEdges(vertex, null, 0);
             }
@@ -284,7 +284,7 @@ public class PlanarityTester {
         this.lowptEdge = new HashMap<>();
         this.ref = new HashMap<>();
 
-        for (UUID vertex : this.vertices) {
+        for (var vertex : this.vertices) {
             if (this.height.get(vertex) == 0 && !checkPlanarity(vertex)) {
                 return false;
             }
