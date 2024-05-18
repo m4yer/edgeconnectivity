@@ -12,21 +12,22 @@ public class EdgeConnectivity implements GraphProperty {
             planarityTester.addEdge(edge.getFromV(), edge.getToV());
         }
 
-        // graph has to be not planar initially
+        // Graph must be non-planar initially
         if (planarityTester.isPlanar()) {
             return false;
         }
 
-        for (var edge : graph.getEdges()) {
-            planarityTester.removeEdge(edge.getFromV(), edge.getToV());
+        for (var firstEdge : graph.getEdges()) {
+            planarityTester.removeEdge(firstEdge.getFromV(), firstEdge.getToV());
 
-            // check if graph is planar by deleting edge
+            // Graph should remain non-planar after removing one edge
+            // If that's the case then continue
             if (planarityTester.isPlanar()) {
-                System.out.println("Graph became planar after removing " + edge.getFromV() + " and " + edge.getToV());
+
                 return true;
             }
 
-            planarityTester.addEdge(edge.getFromV(), edge.getToV());
+            planarityTester.addEdge(firstEdge.getFromV(), firstEdge.getToV());
         }
 
         return false;
