@@ -4,8 +4,9 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 class ConflictPair {
-    Interval left;
-    Interval right;
+
+    private Interval left;
+    private Interval right;
 
     public void swapIntervals() {
         var tmp = this.left;

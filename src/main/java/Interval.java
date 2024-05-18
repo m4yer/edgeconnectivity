@@ -8,8 +8,9 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Interval {
-    Pair<UUID, UUID> low;
-    Pair<UUID, UUID> high;
+
+    private Pair<UUID, UUID> low;
+    private Pair<UUID, UUID> high;
 
     public boolean isEmpty() {
         return low == null && high == null;
