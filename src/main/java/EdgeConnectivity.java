@@ -22,8 +22,23 @@ public class EdgeConnectivity implements GraphProperty {
 
             // Graph should remain non-planar after removing one edge
             // If that's the case then continue
-            if (planarityTester.isPlanar()) {
+            if (!planarityTester.isPlanar()) {
+                for (var secondEdge : graph.getEdges()) {
+                    if (edgesEquals(firstEdge, secondEdge)) {
+                        continue;
+                    }
 
+                    planarityTester.removeEdge(secondEdge.getFromV(), secondEdge.getToV());
+
+                    if (planarityTester.isPlanar()) {
+                        System.out.println("Graph became planar:");
+                        System.out.println("Removed edge #1: " + firstEdge.getFromV() + " -> " + firstEdge.getToV());
+                        System.out.println("Removed edge #21: " + secondEdge.getFromV() + " -> " + secondEdge.getToV());
+                        return true;
+                    }
+
+                    planarityTester.addEdge(secondEdge.getFromV(), secondEdge.getToV());
+                }
                 return true;
             }
 
@@ -31,6 +46,12 @@ public class EdgeConnectivity implements GraphProperty {
         }
 
         return false;
+    }
+
+    private boolean edgesEquals(Edge a, Edge b) {
+        var fromEquals = a.getFromV().equals(b.getFromV());
+        var toEquals = a.getToV().equals(b.getToV());
+        return fromEquals && toEquals;
     }
 
 }
