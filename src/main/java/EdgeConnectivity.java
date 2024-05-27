@@ -39,7 +39,6 @@ public class EdgeConnectivity implements GraphProperty {
 
                     planarityTester.addEdge(secondEdge.getFromV(), secondEdge.getToV());
                 }
-                return true;
             }
 
             planarityTester.addEdge(firstEdge.getFromV(), firstEdge.getToV());
