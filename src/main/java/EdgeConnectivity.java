@@ -33,7 +33,7 @@ public class EdgeConnectivity implements GraphProperty {
                     if (planarityTester.isPlanar()) {
                         System.out.println("Graph became planar:");
                         System.out.println("Removed edge #1: " + firstEdge.getFromV() + " -> " + firstEdge.getToV());
-                        System.out.println("Removed edge #21: " + secondEdge.getFromV() + " -> " + secondEdge.getToV());
+                        System.out.println("Removed edge #2: " + secondEdge.getFromV() + " -> " + secondEdge.getToV());
                         return true;
                     }
 
